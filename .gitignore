@@ -126,7 +126,7 @@ env
 local_settings.py
 _local_settings.py
 gunicorn-error-log
-static/
+
 
 # Add again for course of purpose
 !db.sqlite3
