@@ -294,3 +294,13 @@ h6 {
     margin: 2rem;
     padding: 0 2rem;
 }
+
+/* Generics */
+/* Creating the axis X and axis Y generically*/
+m-x {
+    margin: 0 var(--spacing-gutter-medium);
+}
+
+m-y {
+    margin: var(--spacing-gutter-medium) 0;
+}
