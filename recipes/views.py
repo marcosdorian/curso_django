@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from .models import Recipe
+from django.db.models import Q
 
 
 # Create your views here.
@@ -44,6 +45,24 @@ def search(request):
     if not search_term:
         raise Http404()
 
+    recipes = Recipe.objects.filter(
+        # I used __contains so SQL find what is inbetween the name
+        # If I don't use this, I will have to search exactly the same name
+        # Search for "bolo", but the name is "bolo de banana", it will find
+        # i before contains is used to ignore capslock or lower
+        # this Q is used to say to SQL that it's OR
+        # you search by title OR description
+        # Q is an imported library
+        Q(
+            Q(title__icontains=search_term) |
+            Q(description__icontains=search_term),
+        ),
+        # it only shows the published recipes
+        is_published=True,
+    ).order_by('-id')
+
     return render(request, 'recipes/pages/search.html', {
         'page_title': f'Search for "{search_term}" |',
+        'search_term': search_term,
+        'recipes': recipes,
     })
